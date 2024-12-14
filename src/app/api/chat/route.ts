@@ -5,6 +5,7 @@
 // Refer to Puppeteer docs here: https://pptr.dev/guides/what-is-puppeteer
 import { NextResponse } from "next/server";
 import { getGroqResponse } from "@/app/utils/groqClient";
+import { urlPattern, scrapeUrl } from "@/app/utils/scraper";
 
 export async function POST(req: Request) {
   try {
@@ -12,6 +13,30 @@ export async function POST(req: Request) {
 
     console.log("message received", message);
 
+    const url = message.match(urlPattern);
+
+    let scrappedContent = "";
+    if (url) {
+      console.log("URL Found", url);
+      const scraperResponse = await scrapeUrl(url);
+      console.log("Scrapped Content", scrappedContent);
+      scrappedContent = scraperResponse.content;
+    }
+
+    // Extract the user's query by removing the URL if present
+    const userQuery = message.replace(url ? url[0] : '', '').trim();
+    
+    const prompt = `
+    Answer my question: "${userQuery}"
+
+    Based on the following content: 
+    <content>
+    ${scrappedContent}
+    </content>
+
+    If the content is empty, respond with "I don't know."    
+    `
+    console.log("PROMPT", prompt);
     const response = await getGroqResponse(message);
 
     return NextResponse.json({ message: response });
