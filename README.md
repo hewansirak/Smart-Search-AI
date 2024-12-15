@@ -42,3 +42,12 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+## References
+
+- [Build a Web Scraper API with Puppeteer
+](https://www.youtube.com/watch?v=kOdIzhPfLuo&ab_channel=ColbyFayock)
+- [API Routes with Next.js ](https://www.youtube.com/watch?v=gEB3ckYeZF4&ab_channel=Codewithguillaume)
+- [Rate Limiting APIs using Redis
+](https://www.youtube.com/watch?v=6QhLdQlyZJc&ab_channel=RasMic)
+- [Redis Caching](https://www.youtube.com/watch?v=-5RTyEim384&ab_channel=Joshtriedcoding)
