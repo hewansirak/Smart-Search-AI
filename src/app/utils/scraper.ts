@@ -33,8 +33,7 @@ export async function scrapeUrl(url: string) {
       return cached;
     }
 
-    logger.info( `Cache miss - proceeding with fresh scrape for: ${url}`);
-
+    logger.info(`Cache miss - proceeding with fresh scrape for: ${url}`);
 
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -113,7 +112,6 @@ export async function scrapeUrl(url: string) {
     };
 
     await cacheContent(url, finalResponse);
-
   } catch (error) {
     console.error(`Error scraping $(url):`, error);
     return {

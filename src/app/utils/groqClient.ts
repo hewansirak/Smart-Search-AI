@@ -16,7 +16,7 @@ export async function getGroqResponse(chatMessages: ChatMessage[]) {
       content:
         "You are an academic expert, you always cite your sources and base your responses on the context that you have been provided.",
     },
-    ...chatMessages
+    ...chatMessages,
   ];
 
   console.log("messages", messages);

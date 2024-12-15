@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       },
     ];
 
-    console.log("LLM Messages", llmMessages)
+    console.log("LLM Messages", llmMessages);
 
     const response = await getGroqResponse(llmMessages);
 
