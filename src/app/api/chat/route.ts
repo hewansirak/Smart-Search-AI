@@ -9,9 +9,10 @@ import { urlPattern, scrapeUrl } from "@/app/utils/scraper";
 
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
+    const { message, messages } = await req.json();
 
     console.log("message received", message);
+    console.timeLog("messages", messages);
 
     const url = message.match(urlPattern);
 
@@ -20,13 +21,15 @@ export async function POST(req: Request) {
       console.log("URL Found", url);
       const scraperResponse = await scrapeUrl(url);
       console.log("Scrapped Content", scrappedContent);
-      scrappedContent = scraperResponse.content;
+      if (scraperResponse) {
+        scrappedContent = scraperResponse.content;
+      }
     }
 
     // Extract the user's query by removing the URL if present
-    const userQuery = message.replace(url ? url[0] : '', '').trim();
-    
-    const prompt = `
+    const userQuery = message.replace(url ? url[0] : "", "").trim();
+
+    const userPrompt = `
     Answer my question: "${userQuery}"
 
     Based on the following content: 
@@ -35,12 +38,23 @@ export async function POST(req: Request) {
     </content>
 
     If the content is empty, respond with "I don't know."    
-    `
-    console.log("PROMPT", prompt);
-    const response = await getGroqResponse(message);
+    `;
+
+    const llmMessages = [
+      ...messages,
+      {
+        role: "user",
+        content: userPrompt,
+      },
+    ];
+
+    console.log("LLM Messages", llmMessages)
+
+    const response = await getGroqResponse(llmMessages);
 
     return NextResponse.json({ message: response });
   } catch (error) {
+    console.log("Error", error);
     return NextResponse.json({ message: "Error" });
   }
 }
