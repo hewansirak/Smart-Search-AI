@@ -1,4 +1,3 @@
-import { ScrappedContent } from "./scraper";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { Logger } from "./logger";
@@ -17,15 +16,26 @@ const CACHE_TTL = 7 * (24 * 60 * 60);
 const MAX_CACHE_SIZE = 1024000; // 1mb limit for cached content
 
 export const urlPattern =
-  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
 
 function cleanText(text: string): string {
-  return text.replace(/\s+/g, " ").trim();
+  return text.replace(/\s+/g, " ").replace(/\n+/g, " ").trim();
 }
 
 // Function to scrape content from a URL
 export async function scrapeUrl(url: string) {
   try {
+    // Check cache first
+    logger.info(`Starting scrape process for: ${url}`);
+    const cached = await getCachedContent(url);
+    if (cached) {
+      logger.info(`Using cached content for: ${url}`);
+      return cached;
+    }
+
+    logger.info( `Cache miss - proceeding with fresh scrape for: ${url}`);
+
+
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
     $("script").remove();
@@ -103,6 +113,7 @@ export async function scrapeUrl(url: string) {
     };
 
     await cacheContent(url, finalResponse);
+
   } catch (error) {
     console.error(`Error scraping $(url):`, error);
     return {
