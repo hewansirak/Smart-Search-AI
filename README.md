@@ -1,4 +1,5 @@
 # AI Answer Engine
+AI Answer Engine with Next.js and TypeScript that can scrape content from websites and mitigates hallucinations by citing its sources when providing answers. This project is inspired by Perplexity.ai
 
 ## Getting Started
 
@@ -42,6 +43,19 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+## Requirements
+
+A chat interface where a user can:
+Paste in a set of URLs and get a response back with the context of all the URLs through an LLM
+Ask a question and get an answer with sources cited
+Share their conversation with others, and let them continue with their conversation
+
+### Challenges
+
+- Build a comprehensive solution to extract content from any kind of URL or data source, such as YouTube videos, PDFs, CSV files, and images
+- Generate visualizations from the data such as bar charts, line charts, histograms, etc.
+- Implement a hierarchical web crawler that starts at a given URL and identifies all relevant links on the page (e.g., hyperlinks, embedded media links, and scrapes the content from those links as well 
 
 ## References
 
